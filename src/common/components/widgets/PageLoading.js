@@ -1,24 +1,40 @@
 import React, { Component } from 'react'
 import Lottie from '../../../libraries/Lottie'
-
+import '../css/pageLoading.css'
 class PageLoading extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      isShow: false
+      isShow: false,
+      isSuccess: false
     }
+    this.hideFeedBack = this.hideFeedBack.bind(this)
   }
 
   show () {
     console.log('run')
     this.setState({
-      isShow: true
+      isShow: true,
+      isSuccess: false
     })
   }
 
-  hide () {
+  async hideFeedBack (isSuccess) {
     this.setState({
-      isShow: false
+      isSuccess
+    })
+    await setInterval( () => {
+      this.setState({
+        isShow: false,
+      })
+    },1500)
+  }
+
+  hide (isSuccess) {
+    isSuccess != 'undefined'
+    ? this.hideFeedBack(isSuccess)
+    : this.setState({
+      isShow: false,
     })
   }
 
@@ -45,16 +61,27 @@ class PageLoading extends Component {
     return (
       <div className='loading-container'>
         <div className='loading-inner'>
-          <Lottie
-            options={{
-              animationData: require('../../../assets/animations/loading_common.json')
-            }}
-            style={{
-              marginBottom: 150
-            }}
-            width={120}
-            height={120}
-          />
+          {
+            !this.state.isSuccess
+            ? <Lottie
+                options={{
+                  animationData: require('../../../assets/animations/bouncing-fruits.json')
+                }}
+                style={{
+                  margin: '15% auto',
+                  width:'15%'
+                }}  
+              />
+            : <Lottie
+                options={{
+                  animationData: require('../../../assets/animations/success-animation.json')
+                }}
+                style={{
+                  margin: '15% auto',
+                  width:'20%'
+                }}
+              />
+          } 
         </div>
       </div>
     )
@@ -66,8 +93,8 @@ export default {
   show () {
     PageLoading.instance && PageLoading.instance.show()
   },
-  hide () {
-    PageLoading.instance && PageLoading.instance.hide()
+  hide (isSuccess) {
+    PageLoading.instance && PageLoading.instance.hide(isSuccess)
   },
   isVisible () {
     return PageLoading.instance.isVisible()

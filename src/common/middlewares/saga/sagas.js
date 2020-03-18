@@ -25,15 +25,13 @@ function * onFetchStart ({ payload: { config } }) {
 
 function * onFetchSuccess ({ payload: { response, config } }) {
   // yield ProgressLoading.hide()
-  yield PageLoading.hide()
+  yield PageLoading.hide(true)
   // console.log('Fetch Success', config)
 }
 
 function * onFetchFailure ({ payload: { error, config } }) {
   // yield ProgressLoading.hide()
-  yield PageLoading.hide()
-  // Notification.error(error.message)
-  console.error(error)
+  yield PageLoading.hide(false)
 }
 
 function * watchFetchStart () {
